@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+- "Made by KØRVEX" in the About screen and README
+
 ### Fixed
 - Desktop shortcut pointed to a wrong path when the folder name contained characters
   outside the Windows ANSI code page (for example `Ø`); shortcuts are now written with

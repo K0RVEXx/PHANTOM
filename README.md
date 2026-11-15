@@ -2,6 +2,8 @@
 
 <sub>Bláthy On Top</sub>
 
+Made by [KØRVEX](https://github.com/K0RVEXx)
+
 [![tests](https://github.com/K0RVEXx/PHANTOM/actions/workflows/tests.yml/badge.svg)](https://github.com/K0RVEXx/PHANTOM/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue.svg)
@@ -137,6 +139,10 @@ send personal data through them. See [DISCLAIMER.md](app/DISCLAIMER.md).
 Contributions are welcome — see [CONTRIBUTING.md](app/CONTRIBUTING.md).
 Security issues: please follow [SECURITY.md](SECURITY.md).
 Release history is in [CHANGELOG.md](app/CHANGELOG.md).
+
+## Author
+
+Made by [KØRVEX](https://github.com/K0RVEXx) — independent software studio.
 
 ## License
 

@@ -5,7 +5,7 @@ import os
 import sys
 import time
 
-from . import PROXY_DIR, NAME, SCHOOL, SLOGAN, TERMS_VERSION, VERSION, logger, ui, winproxy, winshell
+from . import AUTHOR, AUTHOR_URL, PROXY_DIR, NAME, SCHOOL, SLOGAN, TERMS_VERSION, VERSION, logger, ui, winproxy, winshell
 from .config import Config
 from .engine import Engine
 from .proxy import PROTOCOLS, check, check_many, load_file
@@ -519,6 +519,7 @@ class App:
     def about(self):
         ui.title("About PHANTOM")
         ui.kv("Name", NAME)
+        ui.kv("Made by", f"{C}{AUTHOR}{X}  {GR}{AUTHOR_URL}{X}")
         ui.kv("School", SCHOOL)
         ui.kv("Version", f"{VERSION}  (Python {sys.version.split()[0]})")
         ui.kv("License", f"{C}Open source - MIT License{X}")
