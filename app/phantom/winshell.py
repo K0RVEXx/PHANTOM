@@ -5,6 +5,7 @@ re-applies them on start. A .bat file cannot have its own icon, so PHANTOM can
 create a desktop shortcut (with the PHANTOM icon) that starts PHANTOM.bat.
 No administrator rights are needed.
 """
+import base64
 import os
 import subprocess
 
@@ -95,21 +96,93 @@ def create_shortcut():
     if not SUPPORTED:
         raise OSError("Only available on Windows")
     lnk = shortcut_path()
-    script = (
-        "$s = (New-Object -ComObject WScript.Shell).CreateShortcut({lnk});"
-        "$s.TargetPath = {target};"
-        "$s.WorkingDirectory = {cwd};"
-        "$s.IconLocation = {icon} + ',0';"
-        "$s.Description = 'PHANTOM - Proxy Rotation System';"
-        "$s.Save()"
+    # WScript.Shell converts paths to the ANSI code page (Ø -> O on Hungarian Windows),
+    # so the Unicode IShellLinkW interface is used instead.
+    script = SHELL_LINK_CS + (
+        "[PhantomShellLink]::Create({lnk}, {target}, {cwd}, {icon}, "
+        "'PHANTOM - Proxy Rotation System')"
     ).format(lnk=_ps_quote(lnk), target=_ps_quote(BAT_PATH),
              cwd=_ps_quote(ROOT_DIR), icon=_ps_quote(ICON_PATH))
-    r = subprocess.run(["powershell", "-NoProfile", "-NonInteractive", "-Command", script],
-                       capture_output=True, text=True, timeout=30,
-                       creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+    r = _powershell(script)
     if r.returncode != 0 or not os.path.isfile(lnk):
         raise OSError((r.stderr or "shortcut was not created").strip().splitlines()[-1])
+    if shortcut_target() != BAT_PATH:
+        raise OSError("shortcut target was saved incorrectly")
     return lnk
+
+
+def _powershell(script):
+    """Run a PowerShell script. -EncodedCommand (UTF-16) keeps non-ASCII characters
+    in paths (e.g. Ø, á, ő) intact, which plain -Command does not."""
+    encoded = base64.b64encode(script.encode("utf-16-le")).decode("ascii")
+    return subprocess.run(["powershell", "-NoProfile", "-NonInteractive", "-EncodedCommand", encoded],
+                          capture_output=True, text=True, encoding="utf-8", errors="replace",
+                          timeout=30, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+
+
+def shortcut_target():
+    """Target path stored in the desktop shortcut (None if there is none)."""
+    if not shortcut_exists():
+        return None
+    script = SHELL_LINK_CS + "[PhantomShellLink]::Target({lnk})".format(lnk=_ps_quote(shortcut_path()))
+    return _powershell(script).stdout.strip() or None
+
+
+# Minimal Unicode shell-link helper, compiled by PowerShell on demand.
+SHELL_LINK_CS = r"""
+$ProgressPreference = 'SilentlyContinue'
+[Console]::OutputEncoding = [Text.Encoding]::UTF8
+Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
+using System.Text;
+
+[ComImport, Guid("000214F9-0000-0000-C000-000000000046"),
+ InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+interface IShellLinkW {
+    void GetPath([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder f, int c, IntPtr d, uint fl);
+    void GetIDList(out IntPtr p);
+    void SetIDList(IntPtr p);
+    void GetDescription([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder n, int c);
+    void SetDescription([MarshalAs(UnmanagedType.LPWStr)] string n);
+    void GetWorkingDirectory([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder d, int c);
+    void SetWorkingDirectory([MarshalAs(UnmanagedType.LPWStr)] string d);
+    void GetArguments([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder a, int c);
+    void SetArguments([MarshalAs(UnmanagedType.LPWStr)] string a);
+    void GetHotkey(out short h);
+    void SetHotkey(short h);
+    void GetShowCmd(out int s);
+    void SetShowCmd(int s);
+    void GetIconLocation([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder p, int c, out int i);
+    void SetIconLocation([MarshalAs(UnmanagedType.LPWStr)] string p, int i);
+    void SetRelativePath([MarshalAs(UnmanagedType.LPWStr)] string p, uint r);
+    void Resolve(IntPtr h, uint f);
+    void SetPath([MarshalAs(UnmanagedType.LPWStr)] string f);
+}
+
+[ComImport, Guid("00021401-0000-0000-C000-000000000046")]
+class CShellLink { }
+
+public static class PhantomShellLink {
+    public static void Create(string lnk, string target, string cwd, string icon, string desc) {
+        var link = (IShellLinkW)new CShellLink();
+        link.SetPath(target);
+        link.SetWorkingDirectory(cwd);
+        link.SetIconLocation(icon, 0);
+        link.SetDescription(desc);
+        ((IPersistFile)link).Save(lnk, true);
+    }
+    public static string Target(string lnk) {
+        var link = (IShellLinkW)new CShellLink();
+        ((IPersistFile)link).Load(lnk, 0);
+        var sb = new StringBuilder(1024);
+        link.GetPath(sb, sb.Capacity, IntPtr.Zero, 4);
+        return sb.ToString();
+    }
+}
+'@
+"""
 
 
 def remove_shortcut():

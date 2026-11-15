@@ -3,6 +3,13 @@
 All notable changes to PHANTOM are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Fixed
+- Desktop shortcut pointed to a wrong path when the folder name contained characters
+  outside the Windows ANSI code page (for example `Ø`); shortcuts are now written with
+  the Unicode shell-link API and verified after saving
+
 ## [1.0.3] - 2026-11-15
 
 ### Added
