@@ -1,0 +1,10 @@
+# Python
+__pycache__/
+*.pyc
+
+# Local runtime data (may contain proxy credentials or personal settings)
+app/phantom_config.json
+app/logs/
+proxies/*.txt
+!proxies/.gitkeep
+!proxies/example.txt

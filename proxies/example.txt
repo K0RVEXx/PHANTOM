@@ -1,0 +1,16 @@
+# PHANTOM example proxy list - supported formats.
+# Replace these documentation addresses (RFC 5737) with real proxies you are allowed to use.
+# Lines starting with # are ignored.
+
+# IP:PORT (protocol chosen when loading, default http)
+192.0.2.10:8080
+
+# With protocol prefix
+http://192.0.2.11:3128
+socks4://192.0.2.12:1080
+socks5://198.51.100.13:1080
+
+# With authentication
+198.51.100.14:8080:username:password
+username:password@203.0.113.15:3128
+socks5://username:password@203.0.113.16:1080
