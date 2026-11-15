@@ -1,7 +1,7 @@
 """PHANTOM - Proxy Rotation System."""
 import os
 
-VERSION = "1.0.2"
+VERSION = "1.0.3"
 TERMS_VERSION = "1"   # bump when the terms of use change -> users are asked again
 NAME = "PHANTOM"
 SLOGAN = "Bláthy On Top"     # shown under the name - Bláthy is the author's school

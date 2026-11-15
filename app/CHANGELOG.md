@@ -3,7 +3,7 @@
 All notable changes to PHANTOM are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [1.0.3] - 2026-11-15
 
 ### Added
 - PHANTOM icon (hooded phantom on a dark purple folder): applied to the PHANTOM folder on start (Windows drops folder icons when
