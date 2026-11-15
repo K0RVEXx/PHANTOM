@@ -96,7 +96,7 @@ PHANTOM/
 └── app/
     ├── phantom.py       launcher, installs requirements automatically
     ├── requirements.txt
-    ├── assets/phantom.ico  PHANTOM icon
+    ├── assets/phantom-folder.ico  PHANTOM icon
     ├── BRANDING.md · DISCLAIMER.md · CONTRIBUTING.md · CHANGELOG.md
     └── phantom/
         ├── app.py       menus and screens

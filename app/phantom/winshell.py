@@ -11,7 +11,7 @@ import subprocess
 from . import BASE_DIR, ROOT_DIR
 
 SUPPORTED = os.name == "nt"
-ICON_PATH = os.path.join(BASE_DIR, "assets", "phantom.ico")
+ICON_PATH = os.path.join(BASE_DIR, "assets", "phantom-folder.ico")
 DESKTOP_INI = os.path.join(ROOT_DIR, "desktop.ini")
 BAT_PATH = os.path.join(ROOT_DIR, "PHANTOM.bat")
 SHORTCUT_NAME = "PHANTOM.lnk"
