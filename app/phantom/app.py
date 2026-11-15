@@ -5,7 +5,7 @@ import os
 import sys
 import time
 
-from . import PROXY_DIR, NAME, SCHOOL, SLOGAN, TERMS_VERSION, VERSION, logger, ui, winproxy
+from . import PROXY_DIR, NAME, SCHOOL, SLOGAN, TERMS_VERSION, VERSION, logger, ui, winproxy, winshell
 from .config import Config
 from .engine import Engine
 from .proxy import PROTOCOLS, check, check_many, load_file
@@ -414,6 +414,9 @@ class App:
             ui.opt("H", "Health check every  ", f"{W}{s['health_interval']}s{X} {GR}(0 = off){X}")
             ui.opt("S", "Sticky sites        ", onoff(s["sticky"]) + f" {GR}same proxy per website{X}")
             ui.opt("T", "Sticky time         ", f"{W}{s['sticky_minutes']} min{X}")
+            if winshell.SUPPORTED:
+                ui.opt("D", "Desktop shortcut    ",
+                       ui.tag("ON" if winshell.shortcut_exists() else "OFF") + f" {GR}PHANTOM icon{X}")
             ui.opt(0, "Back")
             print(f"\n      {GR}Settings are saved automatically.{X}")
             c = ui.choose()
@@ -472,6 +475,9 @@ class App:
                     s["sticky"] = not s["sticky"]
                     if not s["sticky"]:
                         self.engine._sticky.clear()
+                elif c.lower() == "d" and winshell.SUPPORTED:
+                    toggle_shortcut()
+                    time.sleep(1.5)
                 elif c.lower() == "t":
                     v = int(ui.ask("Minutes a website keeps its proxy (1-120)", s["sticky_minutes"]))
                     if not 1 <= v <= 120:
@@ -671,9 +677,54 @@ def show_declined():
     ui.pause("Press Enter to exit...")
 
 
+def setup_folder_icon():
+    try:
+        if winshell.apply_folder_icon():
+            logger.info("PHANTOM folder icon applied")
+    except OSError as ex:
+        logger.warn(f"Could not apply folder icon: {ex}")
+
+
+def toggle_shortcut():
+    try:
+        if winshell.shortcut_exists():
+            winshell.remove_shortcut()
+            logger.info("Desktop shortcut removed")
+            ui.ok("Desktop shortcut removed.")
+        else:
+            winshell.create_shortcut()
+            logger.info("Desktop shortcut created")
+            ui.ok("Desktop shortcut created with the PHANTOM icon.")
+    except OSError as ex:
+        logger.error(f"Desktop shortcut failed: {ex}")
+        ui.err(f"Could not change the desktop shortcut: {ex}")
+
+
+def offer_shortcut(cfg):
+    """Ask once, after the terms are accepted, whether to create a desktop shortcut."""
+    if cfg["shortcut_asked"] or not winshell.SUPPORTED or winshell.shortcut_exists():
+        return
+    ui.title("Desktop Shortcut")
+    for line in (
+        "Would you like a PHANTOM shortcut on your desktop?",
+        "",
+        "It starts PHANTOM with one double-click and shows the",
+        "PHANTOM icon. You can add or remove it any time in",
+        "Rotation Settings -> [D] Desktop shortcut.",
+    ):
+        print(f"      {G}{line}{X}")
+    print()
+    answer = ui.ask("Create desktop shortcut? (y/n)", "y").lower()
+    cfg["shortcut_asked"] = True
+    if answer.startswith("y"):
+        toggle_shortcut()
+        time.sleep(1.5)
+
+
 def main():
     ui.init()
     logger.info(f"PHANTOM {VERSION} started")
+    setup_folder_icon()
     app = App()
     atexit.register(app.shutdown)   # restore Windows proxy even on errors
     if os.name == "nt":             # ...and when the window is closed with X
@@ -688,6 +739,7 @@ def main():
         ctypes.windll.kernel32.SetConsoleCtrlHandler(app._console_handler, True)
     try:
         if accept_terms(app.cfg):
+            offer_shortcut(app.cfg)
             app.main_menu()
     except (KeyboardInterrupt, EOFError):
         pass

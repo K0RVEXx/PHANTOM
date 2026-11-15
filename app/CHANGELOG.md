@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+- PHANTOM icon: applied to the PHANTOM folder on start (Windows drops folder icons when
+  extracting ZIPs), plus an optional desktop shortcut with the icon - offered once on first
+  start and available in Rotation Settings -> [D]
+
 ### Fixed
 - Layout was off-center after leaving full screen: PHANTOM now waits until the window
   size settles before redrawing, and also catches resizes that happen while drawing

@@ -2,3 +2,5 @@
 *.bat text eol=crlf
 *.png binary
 *.gif binary
+desktop.ini text eol=crlf
+*.ico binary

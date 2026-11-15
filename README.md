@@ -47,6 +47,7 @@ switching between them on a timer, on demand, or automatically when one fails.
 - **Optional** Windows system proxy mode — enabled only when you choose it, restored
   automatically when rotation stops, on exit, or on the next start after a crash
 - Centered, resize-aware terminal UI that adapts to window size and full screen
+- PHANTOM icon on the folder and an optional desktop shortcut with the icon
 - No administrator rights required; settings are saved automatically
 
 ## Requirements
@@ -63,6 +64,9 @@ Start with a double-click on `PHANTOM.bat`, or:
 ```bash
 python app/phantom.py
 ```
+
+> **Tip:** Windows does not allow `.bat` files to have their own icon. On first start,
+> PHANTOM puts its icon on the folder and offers a desktop shortcut with the icon.
 
 1. Put your proxy lists (`.txt`) into the `proxies` folder
    (see `proxies/example.txt` for the supported formats).
@@ -82,6 +86,7 @@ curl -x http://127.0.0.1:8888 https://api.ipify.org
 ```
 PHANTOM/
 ├── PHANTOM.bat          start here (double-click)
+├── desktop.ini          gives the folder the PHANTOM icon
 ├── README.md
 ├── LICENSE
 ├── SECURITY.md
@@ -91,6 +96,7 @@ PHANTOM/
 └── app/
     ├── phantom.py       launcher, installs requirements automatically
     ├── requirements.txt
+    ├── assets/phantom.ico  PHANTOM icon
     ├── BRANDING.md · DISCLAIMER.md · CONTRIBUTING.md · CHANGELOG.md
     └── phantom/
         ├── app.py       menus and screens
@@ -98,6 +104,7 @@ PHANTOM/
         ├── tunnel.py    HTTP / HTTPS / SOCKS4 / SOCKS5 upstream connections
         ├── proxy.py     proxy model, list parsing, availability checks
         ├── winproxy.py  optional Windows system proxy (per user, restorable)
+        ├── winshell.py  folder icon and desktop shortcut
         ├── config.py    auto-saved settings (app/phantom_config.json)
         ├── logger.py    activity log (app/logs/phantom.log)
         └── ui.py        colors, layout, resize-aware input
