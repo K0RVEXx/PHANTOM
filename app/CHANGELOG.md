@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 - Terms of use screen on first start (asked again only when the terms change)
+- Friendly explanation screen when the terms are declined
 - Acceptable use and no-liability-for-misuse section in DISCLAIMER.md and README
 
 ## [1.0.0] - 2026-11-15

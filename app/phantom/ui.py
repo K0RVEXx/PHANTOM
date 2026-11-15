@@ -202,9 +202,9 @@ def ask(prompt, default=None):
     return val if val else ("" if default is None else str(default))
 
 
-def pause():
+def pause(text="Press Enter to return..."):
     try:
-        input(f"\n{margin()}      {GR}Press Enter to return...{X}")
+        input(f"\n{margin()}      {GR}{text}{X}")
     except EOFError:
         pass
 

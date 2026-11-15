@@ -5,6 +5,7 @@ def answers(monkeypatch, *replies):
     it = iter(replies)
     monkeypatch.setattr(ui, "choose", lambda *a, **k: next(it))
     monkeypatch.setattr(ui, "clear", lambda: None)
+    monkeypatch.setattr(ui, "pause", lambda *a, **k: None)
 
 
 def test_accept_saves_version(monkeypatch, cfg):

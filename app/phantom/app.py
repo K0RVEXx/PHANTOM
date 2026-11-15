@@ -587,9 +587,33 @@ def accept_terms(cfg):
             return True
         if answer.lower() in ("no", "n"):
             logger.info("Terms of use declined - exiting")
-            print()
-            ui.info("You must accept the terms to use PHANTOM. Exiting.")
+            show_declined()
             return False
+
+
+DECLINED = (
+    "We're sorry, but PHANTOM can't be used without accepting",
+    "the Terms of Use.",
+    "",
+    "These terms exist to keep everyone safe. Please never use",
+    "PHANTOM - or any similar tool - for illegal or harmful",
+    "purposes, such as attacking systems, evading bans, fraud",
+    "or spam.",
+    "",
+    "If you change your mind, simply start PHANTOM again and",
+    "type 'yes' to accept.",
+    "",
+    "Thank you for understanding. Stay safe!",
+)
+
+
+def show_declined():
+    ui.title("Terms Not Accepted")
+    for line in DECLINED:
+        color = C if line.startswith("Thank you") else W if line.startswith("We're") else G
+        print(f"      {color}{line}{X}")
+    print()
+    ui.pause("Press Enter to exit...")
 
 
 def main():
