@@ -43,6 +43,8 @@ TAG_COLORS = {
 }
 
 header_h = 0   # lines used by the current header
+drawn_size = None   # window size the current screen was drawn for
+RESIZE_SETTLE = 0.3  # s the size must stay unchanged before redrawing
 
 
 # ------------------------------------------------------------------ layout
@@ -102,8 +104,9 @@ def tag(state, width=0):
 # ------------------------------------------------------------------ header
 def banner():
     """Full ASCII banner when the window is tall enough, compact otherwise."""
-    global header_h
+    global header_h, drawn_size
     clear()
+    drawn_size = size()      # the size this screen is laid out for
     if size()[1] >= 38:
         print()
         for line in BANNER:
@@ -224,7 +227,9 @@ def _live_input(prompt):
     if msvcrt is None or not sys.stdin.isatty():
         return input(prompt)
     builtins.print(prompt, end="", flush=True)
-    start, buf = size(), []
+    # Compare against the size the screen was drawn for, so a resize that
+    # happened while drawing is caught too.
+    start, buf = drawn_size or size(), []
     while True:
         if msvcrt.kbhit():
             ch = msvcrt.getwch()
@@ -246,8 +251,23 @@ def _live_input(prompt):
                 sys.stdout.flush()
         else:
             if size() != start:
+                wait_for_stable_size()
                 return REDRAW
             time.sleep(0.05)
+
+
+def wait_for_stable_size(settle=None):
+    """Leaving full screen resizes the window in several steps; wait until the
+    size stops changing so the redraw uses the final size, not an in-between one."""
+    settle = RESIZE_SETTLE if settle is None else settle
+    last, since = size(), time.time()
+    deadline = since + 3
+    while time.time() - since < settle and time.time() < deadline:
+        time.sleep(0.05)
+        cur = size()
+        if cur != last:
+            last, since = cur, time.time()
+    return last
 
 
 def choose(prompt="Select an option"):

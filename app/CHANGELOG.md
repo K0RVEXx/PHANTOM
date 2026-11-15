@@ -3,6 +3,12 @@
 All notable changes to PHANTOM are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Fixed
+- Layout was off-center after leaving full screen: PHANTOM now waits until the window
+  size settles before redrawing, and also catches resizes that happen while drawing
+
 ## [1.0.2] - 2026-11-15
 
 ### Added
