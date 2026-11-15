@@ -23,7 +23,8 @@ DEFAULTS = {
     "last_list": "",
     "default_protocol": "http",
     "sysproxy_backup": {},
-    "terms_accepted": "",    # version of the terms of use the user accepted   # original Windows proxy values while PHANTOM controls them
+    "terms_accepted": "",    # version of the terms of use the user accepted
+    "terms_declined": False, # user declined last time -> asked why they came back   # original Windows proxy values while PHANTOM controls them
 }
 
 

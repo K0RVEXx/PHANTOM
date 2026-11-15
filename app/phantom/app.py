@@ -567,10 +567,63 @@ def terms_accepted(cfg):
     return cfg["terms_accepted"] == TERMS_VERSION
 
 
+WELCOME_BACK = (
+    "Welcome back! Last time you chose not to accept the",
+    "Terms of Use.",
+    "",
+    "Before we continue, please tell us honestly why you are",
+    "here. There is no wrong answer.",
+)
+
+ONLY_TO_GET_IN = (
+    "Thank you for being honest - we appreciate it.",
+    "",
+    "Accepting the Terms of Use is not just a click to get in.",
+    "It is a promise that you will use PHANTOM only lawfully",
+    "and never for illegal or harmful purposes.",
+    "",
+    "Please read the terms again, and only type 'yes' if you",
+    "truly agree with them. If you don't, that's okay -",
+    "just type 'no' and PHANTOM will close.",
+)
+
+
+def welcome_back():
+    """Shown when the user previously declined the terms.
+    Returns False if the user chose to exit."""
+    while True:
+        ui.title("Welcome Back")
+        for line in WELCOME_BACK:
+            print(f"      {G}{line}{X}")
+        print()
+        ui.opt(1, "I changed my mind - I agree to use PHANTOM responsibly")
+        ui.opt(2, "I'm only back because PHANTOM wouldn't let me in")
+        ui.opt(0, "Exit")
+        print()
+        c = ui.choose()
+        if c == "1":
+            logger.info("Returning user: changed their mind about the terms")
+            return True
+        if c == "2":
+            logger.info("Returning user: came back only to get in - terms explained again")
+            ui.title("A Quick Word")
+            for line in ONLY_TO_GET_IN:
+                color = C if line.startswith("Thank you") else G
+                print(f"      {color}{line}{X}")
+            ui.pause("Press Enter to read the terms...")
+            return True
+        if c == "0":
+            return False
+
+
 def accept_terms(cfg):
-    """First-run terms of use. Asked again only when TERMS_VERSION changes."""
+    """First-run terms of use. Asked again only when TERMS_VERSION changes.
+    Users who declined before are asked why they came back."""
     if terms_accepted(cfg):
         return True
+    if cfg["terms_declined"] and not welcome_back():
+        logger.info("Returning user exited without reviewing the terms")
+        return False
     while True:
         ui.title("Terms of Use")
         for line in TERMS:
@@ -583,9 +636,11 @@ def accept_terms(cfg):
             continue
         if answer.lower() in ("yes", "y"):
             cfg["terms_accepted"] = TERMS_VERSION
+            cfg["terms_declined"] = False
             logger.info(f"Terms of use accepted (version {TERMS_VERSION})")
             return True
         if answer.lower() in ("no", "n"):
+            cfg["terms_declined"] = True
             logger.info("Terms of use declined - exiting")
             show_declined()
             return False
@@ -610,7 +665,7 @@ DECLINED = (
 def show_declined():
     ui.title("Terms Not Accepted")
     for line in DECLINED:
-        color = C if line.startswith("Thank you") else W if line.startswith("We're") else G
+        color = C if line.startswith("Thank you") else G
         print(f"      {color}{line}{X}")
     print()
     ui.pause("Press Enter to exit...")

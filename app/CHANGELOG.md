@@ -3,6 +3,15 @@
 All notable changes to PHANTOM are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Added
+- "Welcome back" screen for users who declined the terms before: asks honestly why they
+  returned and explains that accepting is a real promise, not just a way in
+
+### Changed
+- Declined-terms message is now shown fully in PHANTOM green
+
 ## [1.0.1] - 2026-11-15
 
 ### Added
