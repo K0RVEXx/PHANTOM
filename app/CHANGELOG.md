@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
-- PHANTOM icon: applied to the PHANTOM folder on start (Windows drops folder icons when
+- PHANTOM icon (hooded phantom on a dark purple folder): applied to the PHANTOM folder on start (Windows drops folder icons when
   extracting ZIPs), plus an optional desktop shortcut with the icon - offered once on first
   start and available in Rotation Settings -> [D]
 
