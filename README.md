@@ -7,6 +7,11 @@
 ![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue.svg)
 ![Platform: Windows](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-lightgrey.svg)
 
+> [!IMPORTANT]
+> PHANTOM is intended for legitimate purposes only. The author does not endorse any
+> illegal activity and accepts no liability for misuse. You are solely responsible for
+> how you use it — see [DISCLAIMER.md](app/DISCLAIMER.md).
+
 **PHANTOM** is a terminal-based proxy rotation tool for Windows. It runs a local
 proxy on `127.0.0.1` and forwards traffic through proxies from your own lists,
 switching between them on a timer, on demand, or automatically when one fails.
@@ -109,6 +114,12 @@ The tests run offline and never touch your real settings or logs.
 They also run automatically on GitHub for every push and pull request.
 
 ## Responsible use
+
+PHANTOM is intended for legitimate purposes only, such as privacy, testing your own
+services and learning about networking. The author **does not endorse, support or
+encourage any illegal activity** and **accepts no liability** for any misuse, damage or
+illegal act committed with this software. On first start, PHANTOM asks you to accept
+these terms.
 
 Use only proxies you are authorized to use and follow the laws and the terms of the
 services you access. Free public proxies are untrusted: never log in to accounts or

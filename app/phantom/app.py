@@ -5,7 +5,7 @@ import os
 import sys
 import time
 
-from . import PROXY_DIR, NAME, SCHOOL, SLOGAN, VERSION, logger, ui, winproxy
+from . import PROXY_DIR, NAME, SCHOOL, SLOGAN, TERMS_VERSION, VERSION, logger, ui, winproxy
 from .config import Config
 from .engine import Engine
 from .proxy import PROTOCOLS, check, check_many, load_file
@@ -546,6 +546,51 @@ class App:
 
 LINE_W = ui.LAYOUT_W - 8
 
+TERMS = (
+    "PHANTOM is intended for legitimate purposes only, such as",
+    "protecting your privacy, testing your own services and",
+    "learning about networking.",
+    "",
+    "By using PHANTOM you agree that:",
+    "",
+    "  1. You use it only lawfully and only with proxies you are",
+    "     authorized to use.",
+    "  2. You will not use it for unauthorized access, evading",
+    "     bans or security measures, attacks, fraud or spam.",
+    "  3. You are solely responsible for how you use it.",
+    "  4. The author does not endorse any illegal activity and",
+    "     accepts no liability for misuse or damage.",
+)
+
+
+def terms_accepted(cfg):
+    return cfg["terms_accepted"] == TERMS_VERSION
+
+
+def accept_terms(cfg):
+    """First-run terms of use. Asked again only when TERMS_VERSION changes."""
+    if terms_accepted(cfg):
+        return True
+    while True:
+        ui.title("Terms of Use")
+        for line in TERMS:
+            print(f"      {G if not line.startswith('  ') else W}{line}{X}")
+        print()
+        print(f"      {GR}Full text: app/DISCLAIMER.md  ·  License: MIT (LICENSE){X}")
+        ui.sep()
+        answer = ui.choose("Type 'yes' to accept, 'no' to exit")
+        if answer == ui.REDRAW:
+            continue
+        if answer.lower() in ("yes", "y"):
+            cfg["terms_accepted"] = TERMS_VERSION
+            logger.info(f"Terms of use accepted (version {TERMS_VERSION})")
+            return True
+        if answer.lower() in ("no", "n"):
+            logger.info("Terms of use declined - exiting")
+            print()
+            ui.info("You must accept the terms to use PHANTOM. Exiting.")
+            return False
+
 
 def main():
     ui.init()
@@ -563,7 +608,8 @@ def main():
         app._console_handler = handler_type(on_console_event)
         ctypes.windll.kernel32.SetConsoleCtrlHandler(app._console_handler, True)
     try:
-        app.main_menu()
+        if accept_terms(app.cfg):
+            app.main_menu()
     except (KeyboardInterrupt, EOFError):
         pass
     finally:

@@ -2,6 +2,24 @@
 
 **PHANTOM is independently developed software.**
 
+## Acceptable use and no liability for misuse
+
+PHANTOM is intended **for legitimate purposes only**, such as protecting your privacy,
+testing your own services and learning about networking.
+
+- The author **does not endorse, support or encourage any illegal activity**.
+- **You are solely responsible** for how you use this software and for complying with
+  all applicable laws and the terms of service of the services you access.
+- The author **accepts no liability** for any misuse, damage or illegal act committed
+  with this software by anyone.
+- Do not use PHANTOM to gain unauthorized access to systems, to evade bans or security
+  measures, to attack or overload services, or for fraud, spam or any other unlawful
+  purpose.
+
+PHANTOM asks you to accept these terms the first time it starts.
+
+## Other notices
+
 - The **Bláthy Ottó Titusz Informatikai Technikum** is not necessarily affiliated with
   this project. The "Bláthy On Top" line is a personal reference by the author and does
   **not** represent the school's support, endorsement or approval. PHANTOM is not

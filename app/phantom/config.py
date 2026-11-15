@@ -22,7 +22,8 @@ DEFAULTS = {
     "listen_port": 8888,     # local proxy port (127.0.0.1 only)
     "last_list": "",
     "default_protocol": "http",
-    "sysproxy_backup": {},   # original Windows proxy values while PHANTOM controls them
+    "sysproxy_backup": {},
+    "terms_accepted": "",    # version of the terms of use the user accepted   # original Windows proxy values while PHANTOM controls them
 }
 
 
