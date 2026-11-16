@@ -25,7 +25,8 @@ DEFAULTS = {
     "sysproxy_backup": {},
     "terms_accepted": "",    # version of the terms of use the user accepted
     "terms_declined": False, # user declined last time -> asked why they came back
-    "shortcut_asked": False, # desktop shortcut offer was shown once   # original Windows proxy values while PHANTOM controls them
+    "shortcut_asked": False, # desktop shortcut offer was shown once
+    "integrity_ack": "",     # modified-copy notice acknowledged for this exact state   # original Windows proxy values while PHANTOM controls them
 }
 
 

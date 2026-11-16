@@ -92,6 +92,7 @@ PHANTOM/
 ├── README.md
 ├── LICENSE
 ├── SECURITY.md
+├── tools/               update_integrity.py (file list for the modified-copy check)
 ├── tests/               automated tests (pytest)
 ├── .github/             CI workflow, issue and PR templates
 ├── proxies/             your proxy lists (.txt) and exported online proxies
@@ -154,6 +155,9 @@ see [LICENSE](LICENSE).
   or inside your own company).
 - ❌ You may not publish, share, sell or otherwise distribute PHANTOM or a changed version of it.
 - ❌ You may not present PHANTOM or a changed version as your own work.
+
+On start, PHANTOM checks its own program files. If they were changed, it shows a short
+reminder of what the license allows. It never blocks you from using your changed copy.
 
 Earlier versions (up to and including v1.0.3) were released under the MIT License and
 remain available under it.

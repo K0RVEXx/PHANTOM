@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+- Modified-copy check: PHANTOM compares its program files with the released list on start
+  and, if they were changed, reminds the user what the license allows (shown once per change,
+  never blocks)
+
 ### Changed
 - License: from now on **PolyForm Internal Use License 1.0.0** with an extra permission
   for personal use - you may use and change the software for yourself, but not publish,

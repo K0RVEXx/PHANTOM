@@ -5,7 +5,7 @@ import os
 import sys
 import time
 
-from . import AUTHOR, AUTHOR_URL, PROXY_DIR, NAME, SCHOOL, SLOGAN, TERMS_VERSION, VERSION, logger, ui, winproxy, winshell
+from . import AUTHOR, AUTHOR_URL, PROXY_DIR, NAME, SCHOOL, SLOGAN, TERMS_VERSION, VERSION, integrity, logger, ui, winproxy, winshell
 from .config import Config
 from .engine import Engine
 from .proxy import PROTOCOLS, check, check_many, load_file
@@ -701,6 +701,54 @@ def toggle_shortcut():
         ui.err(f"Could not change the desktop shortcut: {ex}")
 
 
+MODIFIED = (
+    "This copy of PHANTOM has been changed since it was released.",
+    "",
+    "That is fine for your own use - the license lets you change",
+    "PHANTOM for yourself. But you may NOT:",
+    "",
+    "  - publish, share or upload this changed version anywhere,",
+    "  - give it to other people, or sell it,",
+    "  - present it (or the original) as your own work.",
+    "",
+    "The original PHANTOM is made by KØRVEX:",
+    "  https://github.com/K0RVEXx/PHANTOM",
+)
+
+
+def integrity_notice(cfg):
+    """Remind the user what the license allows if program files were changed.
+    Shown once per changed state; never blocks."""
+    try:
+        result = integrity.check()
+    except OSError as ex:
+        logger.warn(f"Integrity check failed: {ex}")
+        return
+    if result["status"] != "modified":
+        return
+    files = result["changed"] + result["missing"] + result["added"]
+    logger.warn(f"Modified copy detected ({len(files)} file(s) differ from the release)")
+    if cfg["integrity_ack"] == result["fingerprint"]:
+        return
+    while True:
+        ui.title("Modified Copy")
+        for line in MODIFIED:
+            color = W if line.startswith("  -") else C if "github.com" in line else G
+            print(f"      {color}{line}{X}")
+        print()
+        print(f"      {GR}Changed files: {', '.join(files[:4])}{' …' if len(files) > 4 else ''}{X}")
+        ui.sep()
+        ui.opt(1, "I understand - don't show this again for these changes")
+        ui.opt(0, "Continue")
+        c = ui.choose()
+        if c == ui.REDRAW:
+            continue
+        if c == "1":
+            cfg["integrity_ack"] = result["fingerprint"]
+            logger.info("Modified-copy notice acknowledged")
+        return
+
+
 def offer_shortcut(cfg):
     """Ask once, after the terms are accepted, whether to create a desktop shortcut."""
     if cfg["shortcut_asked"] or not winshell.SUPPORTED or winshell.shortcut_exists():
@@ -740,6 +788,7 @@ def main():
         ctypes.windll.kernel32.SetConsoleCtrlHandler(app._console_handler, True)
     try:
         if accept_terms(app.cfg):
+            integrity_notice(app.cfg)
             offer_shortcut(app.cfg)
             app.main_menu()
     except (KeyboardInterrupt, EOFError):
