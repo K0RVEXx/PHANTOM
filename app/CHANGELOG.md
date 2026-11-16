@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- First-time setup shows a live download bar (percent, size, speed) and an animated
+  indicator while Python installs
 - The window opens maximized on start (classic console: the text area is grown to fill the
   screen first). Can be turned off in Settings -> [W] Start maximized
 

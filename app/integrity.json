@@ -12,7 +12,7 @@
   "phantom/ui.py": "fabaebd5ac56f1985fb5069125a28e1eea68b76aef53207dc4eeef9c243a9430",
   "phantom/winproxy.py": "5c5b887c070cdcc7f09ffdd44f61b284fbfdb928cb9c55acfb0c6dd7a56fc271",
   "phantom/winshell.py": "b888b24e4fe1e1b517f943f530a2f6ce908cf1523189b4ee255d328eea7a131e",
-  "setup/install-python.ps1": "eb82cd48b5b17de9896d6180b4f410f98a7f95c532e33701044e0413fd669cd8"
+  "setup/install-python.ps1": "aadb0ccf71a7fd0acef1248d1f408ea310b4ae2f29cacce5c898c42801848758"
  },
  "version": "1.0.4"
 }

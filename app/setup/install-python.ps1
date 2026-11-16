@@ -6,7 +6,9 @@ param(
     [string]$App = "PHANTOM",
     [ValidateSet("green", "cyan")][string]$Accent = "green",
     [switch]$Preview,           # show the screens without downloading or installing
-    [switch]$PreviewDecline     # show the "not installed" screen without waiting for input
+    [switch]$PreviewDecline,    # show the "not installed" screen without waiting for input
+    [int]$PreviewStopAt = 0,    # preview only: freeze the download bar at this percent (for screenshots)
+    [switch]$Fast               # preview only: no animation delays
 )
 
 $ErrorActionPreference = "Stop"
@@ -50,6 +52,62 @@ function Header {
 function Step([int]$n, [string]$text) { Line "  $GR[$n/3]$X $W$text$X" }
 function Ok([string]$text) { Line "        $G[OK]$X $text" }
 function Fail([string]$text) { Line "        $R[ERROR]$X $text" }
+
+# ---------------------------------------------------------------- progress
+$BarWidth = 30
+function DrawBar([double]$done, [double]$total, [double]$secs) {
+    $pct = if ($total -gt 0) { [Math]::Min([double]1.0, [double]($done / $total)) } else { 0.0 }   # keep it a fraction
+    $fill = [int][Math]::Floor($pct * $BarWidth)
+    $bar = $A + ("█" * $fill) + $GR + ("░" * ($BarWidth - $fill)) + $X
+    $secs = [Math]::Max(0.001, $secs)
+    $nums = "{0,3}%   {1,4:N1} / {2:N1} MB   {3,4:N1} MB/s" -f [int]($pct * 100), ($done / 1MB), ($total / 1MB), ($done / $secs / 1MB)
+    Write-Host ("`r" + (Pad "        $bar $W$nums$X  ")) -NoNewline
+}
+
+function Download([string]$url, [string]$out) {
+    # Streams the file in chunks so a live progress bar can be shown.
+    $watch = [Diagnostics.Stopwatch]::StartNew()
+    if ($Preview) {
+        $total = 29991280.0; $done = 0.0
+        while ($done -lt $total) {
+            $done = [Math]::Min($total, $done + 786432)
+            DrawBar $done $total ($done / 4.3MB)          # preview: show a realistic speed
+            if ($PreviewStopAt -gt 0 -and $done -ge $total * $PreviewStopAt / 100) { Write-Host ""; return $done }
+            if (-not $Fast) { Start-Sleep -Milliseconds 45 }
+        }
+        Write-Host ""; return $done
+    }
+    [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+    $req = [Net.HttpWebRequest]::Create($url)
+    $req.UserAgent = "KORVEX-setup"
+    $resp = $req.GetResponse()
+    $total = [double]$resp.ContentLength
+    $in = $resp.GetResponseStream()
+    $fs = [IO.File]::Create($out)
+    try {
+        $buf = New-Object byte[] 131072
+        $done = 0.0; $last = -1000
+        while (($n = $in.Read($buf, 0, $buf.Length)) -gt 0) {
+            $fs.Write($buf, 0, $n)
+            $done += $n
+            if ($watch.ElapsedMilliseconds - $last -ge 100) { DrawBar $done $total $watch.Elapsed.TotalSeconds; $last = $watch.ElapsedMilliseconds }
+        }
+        DrawBar $done $total $watch.Elapsed.TotalSeconds
+        Write-Host ""
+    } finally { $fs.Close(); $in.Close(); $resp.Close() }
+    return $done
+}
+
+function Spin($proc, [string]$label) {
+    # Animated indicator while a process runs (the Python installer gives no percentage).
+    $frames = @("▖", "▘", "▝", "▗")
+    $watch = [Diagnostics.Stopwatch]::StartNew(); $i = 0
+    while (-not $proc.HasExited) {
+        Write-Host ("`r" + (Pad "        $A$($frames[$i % 4])$X $W$label$X $GR$([int]$watch.Elapsed.TotalSeconds)s$X   ")) -NoNewline
+        Start-Sleep -Milliseconds 120; $i++
+    }
+    Write-Host ("`r" + (Pad (" " * 50)) + "`r") -NoNewline
+}
 
 # ---------------------------------------------------------------- screens
 function Ask {
@@ -102,11 +160,9 @@ function Install {
     $tmp = Join-Path $env:TEMP "python-$PyVersion-$Arch.exe"
 
     Step 1 "Downloading from python.org…"
-    if ($Preview) { Ok "28.6 MB downloaded" }
-    else {
-        try { Invoke-WebRequest -Uri $Url -OutFile $tmp -UseBasicParsing; Ok ("{0:N1} MB downloaded" -f ((Get-Item $tmp).Length / 1MB)) }
-        catch { Fail "Download failed: $($_.Exception.Message)"; return $false }
-    }
+    try { $got = Download $Url $tmp } catch { Write-Host ""; Fail "Download failed: $($_.Exception.Message)"; return $false }
+    if ($PreviewStopAt -gt 0) { return $true }
+    Ok ("{0:N1} MB downloaded" -f ($got / 1MB))
 
     Step 2 "Checking the digital signature…"
     if ($Preview) { Ok "Signed by Python Software Foundation" }
@@ -122,10 +178,15 @@ function Install {
     }
 
     Step 3 "Installing for this user (this can take a minute)…"
-    if ($Preview) { Ok "Python $PyVersion installed" }
+    if ($Preview) {
+        if (-not $Fast) { $fake = Start-Process -FilePath "powershell" -ArgumentList "-NoProfile -Command Start-Sleep 3" -WindowStyle Hidden -PassThru; Spin $fake "Installing Python $PyVersion…" }
+        Ok "Python $PyVersion installed"
+    }
     else {
         $installArgs = "/quiet InstallAllUsers=0 PrependPath=1 Include_test=0 Include_launcher=1 InstallLauncherAllUsers=0"
-        $p = Start-Process -FilePath $tmp -ArgumentList $installArgs -Wait -PassThru
+        $p = Start-Process -FilePath $tmp -ArgumentList $installArgs -PassThru
+        Spin $p "Installing Python $PyVersion…"
+        $p.WaitForExit()
         Remove-Item $tmp -ErrorAction SilentlyContinue
         if ($p.ExitCode -ne 0 -or -not (Test-Path $Target)) {
             Fail "The installer stopped with code $($p.ExitCode)."
