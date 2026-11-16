@@ -88,6 +88,30 @@ def init():
             pass
 
 
+def maximize_window():
+    """Open the console window maximized. Classic console: first grow the text area to the
+    largest size that fits the screen (otherwise part of a maximized window stays empty or
+    gets a scrollbar). Windows Terminal: ask it to maximize the window.
+    Returns True if a console window was found."""
+    if os.name != "nt":
+        return False
+    try:
+        import ctypes
+        k32, user32 = ctypes.windll.kernel32, ctypes.windll.user32
+        hwnd = k32.GetConsoleWindow()
+        if not hwnd:
+            return False
+        if not os.environ.get("WT_SESSION"):
+            largest = k32.GetLargestConsoleWindowSize(k32.GetStdHandle(-11))   # COORD packed in a DWORD
+            cols, rows = largest & 0xFFFF, (largest >> 16) & 0xFFFF
+            if cols >= 80 and rows >= 25:
+                os.system(f"mode con: cols={cols} lines={rows}")
+        user32.ShowWindow(hwnd, 3)                                             # SW_MAXIMIZE
+        return True
+    except (OSError, AttributeError):
+        return False
+
+
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
 

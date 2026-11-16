@@ -417,6 +417,8 @@ class App:
             if winshell.SUPPORTED:
                 ui.opt("D", "Desktop shortcut    ",
                        ui.tag("ON" if winshell.shortcut_exists() else "OFF") + f" {GR}PHANTOM icon{X}")
+            ui.opt("W", "Start maximized     ",
+                   ui.tag("ON" if s["start_maximized"] else "OFF") + f" {GR}next start{X}")
             ui.opt(0, "Back")
             print(f"\n      {GR}Settings are saved automatically.{X}")
             c = ui.choose()
@@ -475,6 +477,8 @@ class App:
                     s["sticky"] = not s["sticky"]
                     if not s["sticky"]:
                         self.engine._sticky.clear()
+                elif c.lower() == "w":
+                    s["start_maximized"] = not s["start_maximized"]
                 elif c.lower() == "d" and winshell.SUPPORTED:
                     toggle_shortcut()
                     time.sleep(1.5)
@@ -775,6 +779,8 @@ def main():
     logger.info(f"PHANTOM {VERSION} started")
     setup_folder_icon()
     app = App()
+    if app.cfg["start_maximized"]:
+        ui.maximize_window()
     atexit.register(app.shutdown)   # restore Windows proxy even on errors
     if os.name == "nt":             # ...and when the window is closed with X
         import ctypes

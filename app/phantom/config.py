@@ -7,6 +7,7 @@ from . import BASE_DIR
 CONFIG_PATH = os.path.join(BASE_DIR, "phantom_config.json")
 
 DEFAULTS = {
+    "start_maximized": True,  # open the console window maximized
     "interval": 60,          # seconds between automatic rotations, 0 = manual only
     "timeout": 8,            # connection timeout in seconds
     "auto_failover": True,   # switch proxy automatically after a failed connection
