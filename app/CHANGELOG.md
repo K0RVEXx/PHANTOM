@@ -3,7 +3,7 @@
 All notable changes to PHANTOM are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [1.0.4] - 2026-11-16
 
 ### Added
 - First-time setup: if no working Python is found, `PHANTOM.bat` offers to download the official
@@ -12,14 +12,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Modified-copy check: PHANTOM compares its program files with the released list on start
   and, if they were changed, reminds the user what the license allows (shown once per change,
   never blocks)
+- "Made by KØRVEX" in the About screen and README
 
 ### Changed
 - License: from now on **PolyForm Internal Use License 1.0.0** with an extra permission
   for personal use - you may use and change the software for yourself, but not publish,
   share or redistribute it. Versions up to v1.0.3 remain under the MIT License
 
-### Added
-- "Made by KØRVEX" in the About screen and README
 
 ### Fixed
 - Desktop shortcut pointed to a wrong path when the folder name contained characters
