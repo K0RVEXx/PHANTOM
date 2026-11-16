@@ -14,7 +14,7 @@ from . import BASE_DIR
 
 MANIFEST = os.path.join(BASE_DIR, "integrity.json")
 PACKAGE = os.path.basename(os.path.dirname(os.path.abspath(__file__)))
-EXTRA = ()          # files outside the package to cover (relative to BASE_DIR)
+EXTRA = ("setup/install-python.ps1",)   # files outside the package to cover (relative to BASE_DIR)
 
 
 def tracked_files():

@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- First-time setup: if no working Python is found, `PHANTOM.bat` offers to download the official
+  Python installer from python.org, verifies its signature and installs it for the current user
+- The launcher now ignores the Microsoft Store placeholder `python` command
 - Modified-copy check: PHANTOM compares its program files with the released list on start
   and, if they were changed, reminds the user what the license allows (shown once per change,
   never blocks)
