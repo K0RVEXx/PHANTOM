@@ -3,8 +3,7 @@
 All notable changes to PHANTOM are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-
-## [Unreleased]
+## [1.0.5] - 2026-11-16
 
 ### Added
 - First-time setup shows a live download bar (percent, size, speed) and an animated
@@ -27,7 +26,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - License: from now on **PolyForm Internal Use License 1.0.0** with an extra permission
   for personal use - you may use and change the software for yourself, but not publish,
   share or redistribute it. Versions up to v1.0.3 remain under the MIT License
-
 
 ### Fixed
 - Desktop shortcut pointed to a wrong path when the folder name contained characters

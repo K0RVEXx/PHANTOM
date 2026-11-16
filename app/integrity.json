@@ -1,7 +1,7 @@
 {
  "files": {
   "phantom.py": "9cf420aef527a49bea41758fca8766674ad3180b6f01147ba9bbfa8d1f2d8ba3",
-  "phantom/__init__.py": "aa670469642a22fc97bb45f29c7a460df3fba1c525fb546c0e6cbf5b39f4c295",
+  "phantom/__init__.py": "6823ea95b82e8d31149f5a162ee0cfde883d6482a059589d1e8a24bc6076cfd8",
   "phantom/app.py": "3609bac76a7af2530d4527b9305ecc9ce6d651e50967b49aecdaa45e110676f0",
   "phantom/config.py": "6e1dc72200079a9f9e887bdbeeef12e69ad24797f0c666431902e5d034ba3983",
   "phantom/engine.py": "d43b23c4c917bf376cd92664f79b61e9ea7c25bea13f7e91d1c0c45b87fe3863",
@@ -14,5 +14,5 @@
   "phantom/winshell.py": "b888b24e4fe1e1b517f943f530a2f6ce908cf1523189b4ee255d328eea7a131e",
   "setup/install-python.ps1": "aadb0ccf71a7fd0acef1248d1f408ea310b4ae2f29cacce5c898c42801848758"
  },
- "version": "1.0.4"
+ "version": "1.0.5"
 }
