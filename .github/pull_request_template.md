@@ -10,4 +10,4 @@
 
 - [ ] No credentials or personal data in code, logs or screenshots
 - [ ] `README.md` / `app/CHANGELOG.md` updated if behavior changed
-- [ ] I agree that this contribution is licensed under the project's MIT License
+- [ ] I agree that KØRVEX may use and release this contribution under the project's license

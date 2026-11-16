@@ -38,4 +38,4 @@ PHANTOM asks you to accept these terms the first time it starts.
   restored on the next start.
 
 The software is provided "as is", without warranty of any kind, as stated in the
-[MIT License](../LICENSE).
+[license](../LICENSE).

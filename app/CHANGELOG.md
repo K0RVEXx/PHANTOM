@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+- License: from now on **PolyForm Internal Use License 1.0.0** with an extra permission
+  for personal use - you may use and change the software for yourself, but not publish,
+  share or redistribute it. Versions up to v1.0.3 remain under the MIT License
+
 ### Added
 - "Made by KØRVEX" in the About screen and README
 

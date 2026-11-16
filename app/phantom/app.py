@@ -522,10 +522,10 @@ class App:
         ui.kv("Made by", f"{C}{AUTHOR}{X}  {GR}{AUTHOR_URL}{X}")
         ui.kv("School", SCHOOL)
         ui.kv("Version", f"{VERSION}  (Python {sys.version.split()[0]})")
-        ui.kv("License", f"{C}Open source - MIT License{X}")
+        ui.kv("License", f"{C}PolyForm Internal Use + personal use{X}")
         ui.sep()
-        print("  " + ui.center(f"{C}{B}PHANTOM is open source and free for anyone to use,{X}"))
-        print("  " + ui.center(f"{C}{B}copy, modify and share. See LICENSE.{X}"))
+        print("  " + ui.center(f"{C}{B}You may use and change PHANTOM for yourself,{X}"))
+        print("  " + ui.center(f"{C}{B}but not publish or share it. See LICENSE.{X}"))
         print()
         for line in (
             "Runs a local proxy on 127.0.0.1 and rotates traffic through",
@@ -636,7 +636,7 @@ def accept_terms(cfg):
         for line in TERMS:
             print(f"      {G if not line.startswith('  ') else W}{line}{X}")
         print()
-        print(f"      {GR}Full text: app/DISCLAIMER.md  ·  License: MIT (LICENSE){X}")
+        print(f"      {GR}Full text: app/DISCLAIMER.md  ·  License: see LICENSE{X}")
         ui.sep()
         answer = ui.choose("Type 'yes' to accept, 'no' to exit")
         if answer == ui.REDRAW:

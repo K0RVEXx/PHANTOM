@@ -18,25 +18,18 @@ This is a **personal reference** by the original author to their school, the
 - PHANTOM is an **independently developed** project and is **not official school software**.
 - The name "Bláthy" appears solely as a personal reference.
 
-## Forks and modified versions
+## Copies, forks and modified versions
 
-PHANTOM is licensed under the [MIT License](../LICENSE). Nothing in this document
-restricts the rights granted by that license — you may use, modify, fork, publish and
-distribute the code, including commercially.
+PHANTOM is licensed under the PolyForm Internal Use License 1.0.0 with an extra permission
+for personal use (see [LICENSE](../LICENSE)). In short:
 
-To avoid confusing users, we ask that forks and modified versions follow these
-good-faith guidelines:
+- You may use and change PHANTOM for yourself.
+- You may **not** publish, share or distribute PHANTOM or a changed version of it, and you
+  may **not** present it as your own work.
+- Forking this repository on GitHub only to prepare a pull request for the original
+  project is fine; publishing a fork as a separate project is not.
+- Using the PHANTOM name, logo or visual identity does not imply any official support or
+  approval by the original developer or the Bláthy Ottó Titusz Informatikai Technikum.
 
-- **PHANTOM** is the name of the original project. Modified versions are free to be
-  renamed, and renaming is encouraged for versions that differ substantially.
-- Do not present a fork or modified version as an official PHANTOM release when it
-  is not one.
-- Do not suggest an official connection with, or endorsement by, the original
-  developer or the Bláthy Ottó Titusz Informatikai Technikum.
-- Using the original logo or visual identity does not by itself imply any official
-  support or approval.
-- You may remove or replace the "Bláthy On Top" line in your own version.
-
-These guidelines describe honest attribution and the avoidance of misleading claims.
-They are not additional license terms; in case of doubt, the [LICENSE](../LICENSE) file
-governs your rights to the software.
+Versions released before the license change (see [LICENSE](../LICENSE)) remain available
+under the MIT License. In case of doubt, the [LICENSE](../LICENSE) file governs your rights.
