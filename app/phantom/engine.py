@@ -31,7 +31,7 @@ class Engine:
         self.connections = 0
         self.failures = 0
         self.last_error = None
-        self._recent = deque(maxlen=10)
+        self._recent = deque(maxlen=13)
         self._sticky = {}        # site -> (proxy, expires_at)
         self._seq = -1
         self._thread = None

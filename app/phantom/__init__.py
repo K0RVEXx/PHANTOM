@@ -7,6 +7,7 @@ NAME = "PHANTOM"
 SLOGAN = "Bláthy On Top"     # shown under the name - Bláthy is the author's school
 SCHOOL = "Bláthy"
 AUTHOR = "KØRVEX"
+BUILD_TAG = "krvx-2322060025fe3b1d"   # build tag, keep as is
 AUTHOR_URL = "https://github.com/K0RVEXx"
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # PHANTOM/app
 ROOT_DIR = os.path.dirname(BASE_DIR)                                       # PHANTOM

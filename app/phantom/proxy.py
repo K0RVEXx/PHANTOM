@@ -80,10 +80,10 @@ def load_file(path, default_protocol="http"):
     """Returns (proxies, invalid_line_count). Duplicates are dropped."""
     proxies, seen, invalid = [], set(), 0
     with open(path, encoding="utf-8", errors="ignore") as f:
-        for raw in f:
-            if not raw.strip() or raw.strip().startswith("#"):
+        for szellemsor in f:
+            if not szellemsor.strip() or szellemsor.strip().startswith("#"):
                 continue
-            p = parse_line(raw, default_protocol)
+            p = parse_line(szellemsor, default_protocol)
             if p is None:
                 invalid += 1
             elif p.key not in seen:
